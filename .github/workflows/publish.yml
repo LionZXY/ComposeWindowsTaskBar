@@ -1,0 +1,63 @@
+name: Publish
+
+on:
+  # Cutting a GitHub release publishes that version. The tag is the source of truth for the
+  # version number, so gradle.properties never has to be right at release time.
+  release:
+    types: [ published ]
+  # Manual runs, for a re-publish or a snapshot.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (defaults to VERSION_NAME in gradle.properties)'
+        required: false
+        type: string
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish to Maven Central
+    # Publishing a JVM artifact is platform independent, so use the cheapest runner. CI already
+    # covers the Windows build.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Resolve version
+        id: version
+        shell: bash
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            version="${{ github.event.inputs.version }}"
+          elif [ -n "${{ github.event.release.tag_name }}" ]; then
+            # Accept both `1.2.3` and `v1.2.3` tags.
+            version="${{ github.event.release.tag_name }}"
+            version="${version#v}"
+          else
+            version=""
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Publishing version: ${version:-<from gradle.properties>}"
+
+      - name: Publish
+        run: >
+          ./gradlew publishToMavenCentral --no-configuration-cache --stacktrace
+          ${{ steps.version.outputs.version && format('-PVERSION_NAME={0}', steps.version.outputs.version) || '' }}
+        env:
+          # Central Portal user token, generated at https://central.sonatype.com/account
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PASSWORD }}
+          # Central rejects unsigned artifacts. SIGNING_KEY is an ASCII-armoured private key
+          # (`gpg --armor --export-secret-keys <id>`), SIGNING_PASSWORD its passphrase.
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}

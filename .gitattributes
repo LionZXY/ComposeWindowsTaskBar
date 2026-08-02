@@ -1,0 +1,10 @@
+# Keep line endings predictable regardless of anyone's core.autocrlf setting.
+* text=auto eol=lf
+
+# The Gradle wrapper scripts are executed verbatim: the shell script must stay LF or bash on the
+# Linux CI runner fails with "bad interpreter", and the batch file must stay CRLF for cmd.exe.
+gradlew         text eol=lf
+gradlew.bat     text eol=crlf
+
+*.jar           binary
+*.png           binary
