@@ -1,4 +1,4 @@
-# compose-windows-taskbar
+# Compose for Windows TaskBar
 
 [![Maven Central](https://img.shields.io/maven-central/v/uk.kulikov/compose-windows-taskbar?label=Maven%20Central)](https://central.sonatype.com/artifact/uk.kulikov/compose-windows-taskbar)
 [![CI](https://github.com/LionZXY/ComposeWindowsTaskBar/actions/workflows/ci.yml/badge.svg)](https://github.com/LionZXY/ComposeWindowsTaskBar/actions/workflows/ci.yml)
