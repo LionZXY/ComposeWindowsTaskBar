@@ -9,7 +9,7 @@
 
 Put Compose for Desktop content **inside the Windows taskbar**. Not the tray — the taskbar itself.
 
-![A Compose widget living in the Windows 11 taskbar](docs/taskbar-widget.png)
+![Compose widgets living in the Windows 11 taskbar — a clock, an audio visualizer and a video player cycling](docs/readme-hero.gif)
 
 ## Install
 
@@ -37,9 +37,10 @@ It behaves like Compose's own `Window` / `Tray`: declarative, recomposes live, a
 
 ## Examples
 
-![](docs/animated-widget.gif)
-![](docs/video-widget.gif)
-![](docs/next-event-flyout.png)
+| ![](docs/animated-widget.gif)   |
+|---------------------------------|
+| ![](docs/video-widget.gif)      |
+| ![](docs/next-event-flyout.png) |
 
 ## Options
 
