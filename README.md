@@ -35,6 +35,12 @@ It behaves like Compose's own `Window` / `Tray`: declarative, recomposes live, a
 `application { }` alive while composed. On non-Windows it composes nothing and reports
 `TaskBarError.UnsupportedOs` — multiplatform apps keep building.
 
+## Examples
+
+![](docs/animated-widget.gif)
+![](docs/video-widget.gif)
+![](docs/next-event-flyout.png)
+
 ## Options
 
 | Parameter | Default | What it does |
